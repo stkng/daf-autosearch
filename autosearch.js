@@ -26,6 +26,7 @@ const run = () => {
 
 	const search = (goBack) => {
 	  let id = idInput.value;
+	  goBack ? id-- : id++;
 	  const prefix = prefixInput.value;
 	  const formular = document.querySelector('app-daf-input form');
 		const input = document.querySelector('app-daf-input [id^=mat-input-]');
@@ -37,7 +38,6 @@ const run = () => {
 	  newEvent.initEvent("input", false, true);
 		input.dispatchEvent(newEvent);
 
-		goBack ? id-- : id++;
 		localStorage.setItem('last_id', id);
 		idInput.value = id;
 		document.querySelector('.vin-search-button').click();
@@ -80,7 +80,13 @@ const run = () => {
 	    padding: 1rem;
 	    border: 1px solid dodgerblue;
 	    border-radius: 5px;
-	    boy-shadow: 10px 10px 10px -5px rgba(0,0,0,0.2);
+	    box-shadow: 10px 10px 10px -5px rgba(0,0,0,0.2);
+	    transform: translateX(0);
+	    transition: transform ease-in-out 500ms;
+	  }
+	  
+	  #auto-id-counter.hide {
+	    transform: translateX(calc(100% + 1rem));
 	  }
 
 	  #auto-id-counter label {
@@ -120,10 +126,33 @@ const run = () => {
 	    font-size: 12px;
 	    background-color: skyblue;
 	  }
+	  
+	  #auto-id-counter #toggle {
+	    position: absolute;
+	    top: 50%;
+	    left: -1rem;
+	    transform: translate(-50%, -50%);
+	    padding: .5rem;
+	    background: aliceblue;
+	    border: 1px solid dodgerblue;
+	    cursor: pointer;
+	  }
 	`
 	const styleElement = make('style', styles);
 
 	const modal = make('div', null, null, null, 'auto-id-counter');
+	
+	const toggle = make('div', '▶', null, null, 'toggle');
+	
+	toggle.onclick = () => {
+	  modal.classList.toggle('hide');
+	  
+	  if (modal.classList.contains('hide')) {
+	    toggle.innerText = '◀';
+	  } else {
+	    toggle.innerText = '▶';
+	  }
+	}
 
 	modal.appendChild(styleElement);
 	modal.appendChild(prefixInputLabel);
@@ -132,6 +161,7 @@ const run = () => {
 	modal.appendChild(button);
 	modal.appendChild(buttonWrapper);
 	modal.appendChild(credit);
+	modal.appendChild(toggle);
 	document.body.appendChild(modal);
 }
 

@@ -1,4 +1,5 @@
 const run = () => {
+	console.log('RUNNING AUTOSEARCH SCRIPT');
 	let searchInterval;
 	let searchInProgress = false;
 

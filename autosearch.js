@@ -22,7 +22,7 @@ const idIntervalLabel = make('label', 'Interval in ms');
 const intervalInput = make('input', null, 5000, 'number');
 idIntervalLabel.appendChild(intervalInput);
 
-const search = () => {
+const search = (goBack) => {
   let id = idInput.value;
   const prefix = prefixInput.value;
   const formular = document.querySelector('app-daf-input form');
@@ -35,7 +35,7 @@ const search = () => {
   newEvent.initEvent("input", false, true);
 	input.dispatchEvent(newEvent);
 	
-	id++;
+	goBack ? id-- : id++;
 	localStorage.setItem('last_id', id);
 	idInput.value = id;
 	document.querySelector('.vin-search-button').click();
@@ -56,6 +56,14 @@ button.onclick = () => {
     button.style.backgroundColor = 'firebrick';
   }
 };
+
+const nextButton = make('button', 'Next');
+const prevButton = make('button', 'Prev');
+nextButton.onclick = () => search();
+prevButton.onclick = () => search(true);
+const buttonWrapper = make('div', null, null, null, 'button-wrapper');
+buttonWrapper.appendChild(prevButton);
+buttonWrapper.appendChild(nextButton);
 
 const credit = make('span', `made with ❤ by <a href="https://stkng.de" target="_blank">Steffen</a>`);
 const styles = `
@@ -96,6 +104,20 @@ const styles = `
     font-size: 10px;
     align-self: center;
   }
+  
+  #auto-id-counter #button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 10px 0;
+  }
+  
+  #auto-id-counter #button-wrapper button {
+    flex: 1;
+    font-size: 12px;
+    background-color: skyblue;
+  }
 `
 const styleElement = make('style', styles);
 
@@ -106,5 +128,6 @@ modal.appendChild(prefixInputLabel);
 modal.appendChild(idInputLabel);
 modal.appendChild(idIntervalLabel);
 modal.appendChild(button);
+modal.appendChild(buttonWrapper);
 modal.appendChild(credit);
 document.body.appendChild(modal);
